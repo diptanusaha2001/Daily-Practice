@@ -1,54 +1,23 @@
-class Solution {
-public:
-    int findUnsortedSubarray(vector<int>& nums) {
-        int n = nums.size();
-        int maxi = INT_MIN, mini = INT_MAX;
-        int index1 = 0, index2 = 0;
+class Solution:
+    def findUnsortedSubarray(self, nums: List[int]) -> int:
+        front = 0
+        while front < len(nums) -1 and nums[front] <= nums[front+1]:
+            front +=1
         
-        if(n == 1) return 0;
-        for(int i = 0; i < n; i++)
-        {
-            if(i == 0)
-            {
-                if(nums[i] > nums[i+1])
-                {
-                    maxi = max(maxi, nums[i]);
-                    mini = min(mini, nums[i]);
-                }
-            }
-            else if(i == n - 1)
-            {
-                if(nums[i] < nums[i - 1])
-                {
-                    maxi = max(maxi, nums[i]);
-                    mini = min(mini, nums[i]);
-                }
-            }
-            else 
-            {
-                if(nums[i] > nums[i+1] || nums[i] < nums[i-1])
-                {
-                    maxi = max(maxi, nums[i]);
-                    mini = min(mini, nums[i]);
-                }
-            }
-        }
-        for(int i = 0; i < n; i++)
-        {
-            if(nums[i] > mini)
-            {
-                index1 = i;
-                break;
-            }
-        }
-        for(int i = 0; i < n; i++)
-        {
-            if(nums[i] < maxi)
-            {
-                index2 = i;
-            }
-        }
-        if(maxi == INT_MIN) return 0;
-        else return index2 - index1 + 1;
-    }
-};
+        if front == len(nums)-1:
+            return 0
+        
+        back = len(nums) -1
+        while nums[back] >= nums[back-1]:
+            back -=1
+        
+        max_ = max(nums[front:back+1])
+        min_ = min(nums[front:back+1])
+
+        while front >0 and nums[front-1] > min_:
+            front -=1
+        
+        while back < len(nums)-1 and nums[back+1] < max_:
+            back +=1
+        
+        return back - front + 1
